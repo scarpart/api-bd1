@@ -10,6 +10,9 @@ setpass:
 exec:
 	docker exec -it postgres16-bd psql -U criciumenses -d employeeManagement 
 
+dml-script:
+	cat src/db/DML.sql | docker exec -i postgres16-bd psql -U criciumenses -d employeeManagement
+
 migrateup:
 	migrate -path src/db/migration -database "postgresql://criciumenses:CriciumaNaSerieA@localhost:7654/employeeManagement?sslmode=disable" -verbose up
 
