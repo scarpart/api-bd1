@@ -30,7 +30,7 @@ CREATE TABLE "employee_roles" (
 );
 
 CREATE TABLE "schedules" (
-                             "schedule_id" integer PRIMARY KEY,
+                             "schedule_id" serial PRIMARY KEY,
                              "employee_id" integer,
                              "start_date" date,
                              "end_date" date,
@@ -47,7 +47,7 @@ CREATE TABLE "attendance_records" (
 );
 
 CREATE TABLE "projects" (
-                            "project_id" integer PRIMARY KEY,
+                            "project_id" serial PRIMARY KEY,
                             "project_name" varchar,
                             "department_id" integer,
                             "start_date" date,
@@ -55,25 +55,30 @@ CREATE TABLE "projects" (
 );
 
 CREATE TABLE "project_assignments" (
-                                       "assignment_id" integer PRIMARY KEY,
+                                       "assignment_id" serial PRIMARY KEY,
                                        "project_id" integer,
                                        "employee_id" integer
 );
 
-ALTER TABLE "employees" ADD FOREIGN KEY ("department_id") REFERENCES "departments" ("department_id");
+ALTER TABLE "employees"
+    ADD FOREIGN KEY ("department_id") REFERENCES "departments" ("department_id");
 
-ALTER TABLE "employees" ADD FOREIGN KEY ("employee_id") REFERENCES "departments" ("manager_id");
+ALTER TABLE "departments"
+    ADD FOREIGN KEY ("manager_id") REFERENCES "employees" ("employee_id");
 
-ALTER TABLE "roles" ADD FOREIGN KEY ("role_id") REFERENCES "employee_roles" ("role_id");
+ALTER TABLE "employee_roles"
+    ADD FOREIGN KEY ("employee_id") REFERENCES "employees" ("employee_id"),
+    ADD FOREIGN KEY ("role_id") REFERENCES "roles" ("role_id");
 
-ALTER TABLE "employee_roles" ADD FOREIGN KEY ("employee_id") REFERENCES "employees" ("employee_id");
+ALTER TABLE "schedules"
+    ADD FOREIGN KEY ("employee_id") REFERENCES "employees" ("employee_id");
 
-ALTER TABLE "schedules" ADD FOREIGN KEY ("employee_id") REFERENCES "employees" ("employee_id");
+ALTER TABLE "attendance_records"
+    ADD FOREIGN KEY ("employee_id") REFERENCES "employees" ("employee_id");
 
-ALTER TABLE "attendance_records" ADD FOREIGN KEY ("employee_id") REFERENCES "employees" ("employee_id");
+ALTER TABLE "projects"
+    ADD FOREIGN KEY ("department_id") REFERENCES "departments" ("department_id");
 
-ALTER TABLE "projects" ADD FOREIGN KEY ("department_id") REFERENCES "departments" ("department_id");
-
-ALTER TABLE "project_assignments" ADD FOREIGN KEY ("project_id") REFERENCES "projects" ("project_id");
-
-ALTER TABLE "project_assignments" ADD FOREIGN KEY ("employee_id") REFERENCES "employees" ("employee_id");
+ALTER TABLE "project_assignments"
+    ADD FOREIGN KEY ("project_id") REFERENCES "projects" ("project_id"),
+    ADD FOREIGN KEY ("employee_id") REFERENCES "employees" ("employee_id");
