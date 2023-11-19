@@ -22,4 +22,4 @@ migratedown:
 migratedrop:
 	migrate -path src/db/migration -database "postgresql://criciumenses:CriciumaNaSerieA@localhost:7654/employeeManagement?sslmode=disable" force 1
 
-.PHONY: createdb exec dropdb migrateup migratedown migratedrop setpass
+.PHONY: createdb exec dropdb migrateup migratedown migratedrop setpass dml-script
