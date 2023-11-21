@@ -10,6 +10,7 @@ app.use(express.json());
 // Employee router 
 app.get("/api/employees", employeeController.getEmployees);
 app.get("/api/employees/info", employeeController.getEmployeeAndRoleInformation);
+app.post("/api/employees", employeeController.createEmployee);
 
 // Departments router 
 app.get("/api/departments", departmentController.getDepartments);

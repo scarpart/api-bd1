@@ -1,5 +1,6 @@
 const pool = require('../db/db.js')
 
+// GET 
 const getEmployees = async () => {
     const { rows } = await pool.query("SELECT * FROM employees"); 
     return rows;
@@ -17,7 +18,44 @@ const getEmployeeAndRoleInformation = async () => {
 	}
 }
 
+const createEmployee = async (employee) => {
+	try {
+		const { id } = await pool.query(`INSERT INTO employees ( \
+												 	department_id, \
+													name, \
+													salary, \
+													date_of_birth, \
+													gender, \
+													contact_number, \
+													email \
+												) VALUES ( \
+													${employee.department_id} \
+													${employee.name} \
+													${employee.salary} \
+													${employee.date_of_birth} \
+													${employee.gender} \
+													${employee.contact_number} \
+													${employee.email}\
+												) RETURNING employee_id`);
+		return id;
+	} catch (error) {
+		console.log("Could not create employee:", error);
+		throw error
+	}
+}  
+
+const updateEmployee = async (employee) => {
+	try {
+		await pool.query("");
+	} catch (error) {
+		console.log("Could not UPDATE employee instance:", error);
+		throw error;
+	}
+}
+
 module.exports = {
     getEmployees,
-	getEmployeeAndRoleInformation
+	getEmployeeAndRoleInformation,
+	createEmployee,
+	updateEmployee,
 };

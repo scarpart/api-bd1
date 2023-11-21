@@ -18,18 +18,19 @@ const getEmployeeAndRoleInformation = async (req, res) => {
 	}
 }
 
-//const createEmployee = async (req, res) => {
-//    try {
-//        const user = req.body;
-//        await userRepository.createUser(user);
-//
-//        res.status(201).send("User created successfully.");
-//    } catch (error) {
-//        res.status(500).send("Error creating user.");
-//    }
-//}
+const createEmployee = async (req, res) => {
+	try {
+		const employee = req.body;
+		await employeeRepository.createEmployee(employee);
+
+		res.status(201).send("User created successfully.");
+	} catch (error) {
+		res.status(500).send("Error creating the employee.");
+	}
+}
 
 module.exports = {
     getEmployees,
 	getEmployeeAndRoleInformation,
+	createEmployee,
 }
