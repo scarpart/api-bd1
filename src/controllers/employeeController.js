@@ -9,6 +9,15 @@ const getEmployees = async (req, res) => {
     } 
 };
 
+const getEmployeeAndRoleInformation = async (req, res) => {
+	try {
+		const employees = await employeeRepository.getEmployeeAndRoleInformation();
+		res.status(200).send(employees);
+	} catch (error) {
+		res.status(500).send("Error getting user records from the server.");
+	}
+}
+
 //const createEmployee = async (req, res) => {
 //    try {
 //        const user = req.body;
@@ -22,4 +31,5 @@ const getEmployees = async (req, res) => {
 
 module.exports = {
     getEmployees,
+	getEmployeeAndRoleInformation,
 }

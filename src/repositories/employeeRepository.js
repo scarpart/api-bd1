@@ -5,18 +5,19 @@ const getEmployees = async () => {
     return rows;
 };
 
-//const getUserById = async (id) => {
-//    const { rows } = await pool.query('SELECT * FROM users WHERE id = $1', [id]);
-//    return rows[0];
-//}
-//
-//const createUser = async (user) => {
-//    const { name, email } = user;
-//    const result = await pool.query('INSERT INTO users (name, email) VALUES ($1, $2) RETURNING id',
-//        [name, email]);
-//    return result.rows[0].id;
-//}
+const getEmployeeAndRoleInformation = async () => {
+	try {
+		const { rows } = await pool.query("SELECT e.*, r.role_name FROM employees AS e \
+										   JOIN employee_roles AS er ON er.employee_id = e.employee_id \
+										   LEFT JOIN roles AS r ON er.role_id = r.role_id");
+		return rows;
+	} catch (error) {
+		console.log("Error executing query: ", error);
+		throw error;
+	}
+}
 
 module.exports = {
     getEmployees,
+	getEmployeeAndRoleInformation
 };
