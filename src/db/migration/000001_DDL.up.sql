@@ -2,69 +2,59 @@
 
 CREATE TABLE "employees" (
                              "employee_id" serial PRIMARY KEY,
-                             "department_id" integer,
-                             "name" varchar,
-                             "date_of_birth" date,
+                             "department_id" integer NOT NULL,
+                             "name" varchar NOT NULL,
+							 "salary" integer NOT NULL,
+                             "date_of_birth" date NOT NULL,
                              "gender" varchar,
                              "contact_number" varchar,
-                             "email" varchar
+                             "email" varchar NOT NULL
 );
 
 CREATE TABLE "departments" (
                                "department_id" serial PRIMARY KEY,
-                               "manager_id" integer,
-                               "department_name" varchar
+                               "department_name" varchar NOT NULL
 );
 
 CREATE TABLE "roles" (
                          "role_id" serial PRIMARY KEY,
-                         "role_name" varchar
+                         "role_name" varchar NOT NULL
 );
 
 CREATE TABLE "employee_roles" (
                                   "employee_role_id" serial PRIMARY KEY,
-                                  "employee_id" integer,
-                                  "role_id" integer,
-                                  "start_date" date,
-                                  "end_date" date
+                                  "employee_id" integer NOT NULL,
+                                  "role_id" integer NOT NULL,
+                                  "start_date" date NOT NULL,
+                                  "end_date" date 
 );
 
 CREATE TABLE "schedules" (
                              "schedule_id" serial PRIMARY KEY,
-                             "employee_id" integer,
-                             "start_date" date,
-                             "end_date" date,
-                             "start_time" timestamp,
-                             "end_time" timestamp
-);
-
-CREATE TABLE "attendance_records" (
-                                      "record_id" serial PRIMARY KEY,
-                                      "employee_id" integer,
-                                      "date" date,
-                                      "arrival_time" timestamp,
-                                      "departure_time" timestamp
+                             "employee_id" integer NOT NULL,
+                             "start_date" date NOT NULL,
+                             "end_date" date NOT NULL,
+                             "start_time" timestamp NOT NULL,
+                             "end_time" timestamp NOT NULL
 );
 
 CREATE TABLE "projects" (
                             "project_id" serial PRIMARY KEY,
-                            "project_name" varchar,
-                            "department_id" integer,
-                            "start_date" date,
-                            "end_date" date
+                            "project_name" varchar NOT NULL,
+							"budget" integer NOT NULL,
+                            "start_date" date NOT NULL,
+                            "end_date" date 
 );
 
 CREATE TABLE "project_assignments" (
                                        "assignment_id" serial PRIMARY KEY,
-                                       "project_id" integer,
-                                       "employee_id" integer
+                                       "project_id" integer NOT NULL,
+                                       "employee_id" integer NOT NULL,
+									   "assigned_at" date 
 );
 
 ALTER TABLE "employees"
     ADD FOREIGN KEY ("department_id") REFERENCES "departments" ("department_id");
-
-ALTER TABLE "departments"
-    ADD FOREIGN KEY ("manager_id") REFERENCES "employees" ("employee_id");
 
 ALTER TABLE "employee_roles"
     ADD FOREIGN KEY ("employee_id") REFERENCES "employees" ("employee_id"),
@@ -72,12 +62,6 @@ ALTER TABLE "employee_roles"
 
 ALTER TABLE "schedules"
     ADD FOREIGN KEY ("employee_id") REFERENCES "employees" ("employee_id");
-
-ALTER TABLE "attendance_records"
-    ADD FOREIGN KEY ("employee_id") REFERENCES "employees" ("employee_id");
-
-ALTER TABLE "projects"
-    ADD FOREIGN KEY ("department_id") REFERENCES "departments" ("department_id");
 
 ALTER TABLE "project_assignments"
     ADD FOREIGN KEY ("project_id") REFERENCES "projects" ("project_id"),
