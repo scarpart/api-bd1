@@ -1,8 +1,9 @@
 const pool = require('../db/db.js')
 
 const getEmployees = async () => {
-    const { rows } = await pool.query("SELECT * FROM employees"); 
-    return rows;
+	const query = "SELECT * FROM employees";
+    const { rows } = await pool.query(query); 
+	return [rows, query];
 };
 
 const getEmployeeById = async (employeeId) => {
@@ -10,8 +11,9 @@ const getEmployeeById = async (employeeId) => {
 		const query = "SELECT * FROM employees WHERE employee_id = $1";
 		const values = [employeeId]; 
 
+		const displayQuery = createDisplayQuery(query, values);
 		const { rows } = await pool.query(query, values);
-		return rows;
+		return [rows, displayQuery];
 	} catch (error) {
 		console.log("Error getting employee by id: ", error);
 		throw error;
@@ -20,10 +22,11 @@ const getEmployeeById = async (employeeId) => {
 
 const getEmployeeAndRoleInformation = async () => {
 	try {
-		const { rows } = await pool.query("SELECT e.*, r.role_name FROM employees AS e \
-										   JOIN employee_roles AS er ON er.employee_id = e.employee_id \
-										   LEFT JOIN roles AS r ON er.role_id = r.role_id");
-		return rows;
+		const query = "SELECT e.*, r.role_name FROM employees AS e \
+                       JOIN employee_roles AS er ON er.employee_id = e.employee_id \
+                       LEFT JOIN roles AS r ON er.role_id = r.role_id";
+		const { rows } = await pool.query(query);
+		return [rows, query];
 	} catch (error) {
 		console.log("Error executing query: ", error);
 		throw error;
@@ -53,8 +56,9 @@ const createEmployee = async (employee) => {
 			employee.email,
 		];
 		
+		const displayQuery = createDisplayQuery(query, values);
 		const { id } = await pool.query(query, values);
-		return id;
+		return [id, query];
 	} catch (error) {
 		console.log("Could not create employee:", error);
 		throw error
@@ -94,7 +98,12 @@ const updateEmployee = async (employeeId, updatedEmployee) => {
 const deleteEmployeeById = async (employeeId) => {
 	try {
 		const query = "DELETE FROM employees WHERE employee_id = $1";
+		const values = [employeeId];
+
+		const displayQuery = createDisplayQuery(query, values);
 		await pool.query(query, [employeeId]);
+
+		return [employeeId, displayQuery];
 	} catch (error) {
 		console.log("Could not delete employee.");
 		throw error;

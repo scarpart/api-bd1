@@ -9,9 +9,11 @@ app.use(express.json());
 
 // Employee router 
 app.get("/api/employees", employeeController.getEmployees);
+app.get("/api/employees/:id", employeeController.getEmployeeById);
 app.get("/api/employees/info", employeeController.getEmployeeAndRoleInformation);
 app.post("/api/employees", employeeController.createEmployee);
 app.put("/api/employees", employeeController.updateEmployee);
+app.delete("/api/employees/:id", employeeController.deleteEmployeeById);
 
 // Departments router 
 app.get("/api/departments", departmentController.getDepartments);
