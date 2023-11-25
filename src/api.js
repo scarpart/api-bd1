@@ -21,10 +21,14 @@ app.get("/api/departments/total-expenses", departmentController.getSalaryExpense
 
 // Projects router 
 app.get("/api/projects", projectController.getProjects);
+app.get("/api/projects/:id", projectController.getProjectById);
 app.get("/api/projects/info", projectController.getProjectInformation);
+app.post("/api/projects", projectController.createProject);
+app.put("/api/projects", projectController.updateProject);
+app.delete("/api/projects/:id", projectController.deleteProjectById);
 
 export function run() {
 	app.listen(3000, () => {
 		console.log('Server is running on port 3000.');
-	})
+	});
 }
