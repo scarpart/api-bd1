@@ -20,23 +20,28 @@ const getEmployeeAndRoleInformation = async () => {
 
 const createEmployee = async (employee) => {
 	try {
-		const { id } = await pool.query(`INSERT INTO employees ( \
-												 	department_id, \
-													name, \
-													salary, \
-													date_of_birth, \
-													gender, \
-													contact_number, \
-													email \
-												) VALUES ( \
-													${employee.department_id} \
-													${employee.name} \
-													${employee.salary} \
-													${employee.date_of_birth} \
-													${employee.gender} \
-													${employee.contact_number} \
-													${employee.email}\
-												) RETURNING employee_id`);
+		query = `INSERT INTO employees ( \
+					department_id, \
+					name, \
+					salary, \
+					date_of_birth, \
+					gender, \
+					contact_number, \
+					email \
+				) VALUES ($1, $2, $3, $4, $5, $6, $7) \
+					RETURNING employee_id`;
+
+		values = [
+			employee.department_id,
+			employee.name,
+			employee.salary,
+			employee.date_of_birth,
+			employee.gender,
+			employee.contact_number,
+			employee.email,
+		];
+		
+		const { id } = await pool.query(query, values);
 		return id;
 	} catch (error) {
 		console.log("Could not create employee:", error);
