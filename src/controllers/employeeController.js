@@ -29,8 +29,23 @@ const createEmployee = async (req, res) => {
 	}
 }
 
+const updateEmployee = async (req, res) => {
+    try {
+        const updatedEmployee = req.body;
+        const employeeId = req.body.employeeId; 
+		delete updatedEmployee.employeeId;
+
+        let [id, query] = await employeeRepository.updateEmployee(employeeId, updatedEmployee);
+        res.status(200).send({ id, query });
+    } catch (error) {
+		console.log("controller error: ", error);
+        res.status(500).send("Error updating the employee.");
+    }
+}
+
 module.exports = {
     getEmployees,
 	getEmployeeAndRoleInformation,
 	createEmployee,
+	updateEmployee,
 }

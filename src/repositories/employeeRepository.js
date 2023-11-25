@@ -1,10 +1,22 @@
 const pool = require('../db/db.js')
 
-// GET 
 const getEmployees = async () => {
     const { rows } = await pool.query("SELECT * FROM employees"); 
     return rows;
 };
+
+const getEmployeeById = async (employeeId) => {
+	try {
+		const query = "SELECT * FROM employees WHERE employee_id = $1";
+		const values = [employeeId]; 
+
+		const { rows } = await pool.query(query, values);
+		return rows;
+	} catch (error) {
+		console.log("Error getting employee by id: ", error);
+		throw error;
+	}
+}
 
 const getEmployeeAndRoleInformation = async () => {
 	try {
@@ -20,7 +32,7 @@ const getEmployeeAndRoleInformation = async () => {
 
 const createEmployee = async (employee) => {
 	try {
-		query = `INSERT INTO employees ( \
+		let query = `INSERT INTO employees ( \
 					department_id, \
 					name, \
 					salary, \
@@ -31,7 +43,7 @@ const createEmployee = async (employee) => {
 				) VALUES ($1, $2, $3, $4, $5, $6, $7) \
 					RETURNING employee_id`;
 
-		values = [
+		let values = [
 			employee.department_id,
 			employee.name,
 			employee.salary,
@@ -49,18 +61,61 @@ const createEmployee = async (employee) => {
 	}
 }  
 
-const updateEmployee = async (employee) => {
+const updateEmployee = async (employeeId, updatedEmployee) => {
 	try {
-		await pool.query("");
+		let query = "UPDATE employees SET ";
+		let values = [];
+		let valueCount = 0;
+
+		for (const [key, value] of Object.entries(updatedEmployee)) {
+			if (value != undefined) {
+				valueCount++;
+				query += `${key} = $${valueCount}, `;
+				values.push(value);
+			}
+		}
+
+		query = query.slice(0, -2);
+
+		query += ` WHERE employee_id = $${valueCount + 1}`;
+		values.push(employeeId);
+
+		const displayQuery = createDisplayQuery(query, values);
+		console.log("the end query is: ", displayQuery);
+
+		await pool.query(query, values);
+		return [employeeId, displayQuery];
 	} catch (error) {
-		console.log("Could not UPDATE employee instance:", error);
+		console.log("Could not update employee:", error)
 		throw error;
 	}
 }
 
+const deleteEmployeeById = async (employeeId) => {
+	try {
+		const query = "DELETE FROM employees WHERE employee_id = $1";
+		await pool.query(query, [employeeId]);
+	} catch (error) {
+		console.log("Could not delete employee.");
+		throw error;
+	}
+}
+
+function createDisplayQuery(query, values) {
+    let index = 0;
+    return query.replace(/\$\d+/g, () => {
+        const value = values[index];
+        index++;
+        return typeof value === 'string' ? `'${value}'` : value;
+    });
+}
+
+
 module.exports = {
     getEmployees,
+	getEmployeeById,
 	getEmployeeAndRoleInformation,
 	createEmployee,
 	updateEmployee,
+	deleteEmployeeById
 };

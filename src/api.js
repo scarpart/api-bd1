@@ -11,6 +11,7 @@ app.use(express.json());
 app.get("/api/employees", employeeController.getEmployees);
 app.get("/api/employees/info", employeeController.getEmployeeAndRoleInformation);
 app.post("/api/employees", employeeController.createEmployee);
+app.put("/api/employees", employeeController.updateEmployee);
 
 // Departments router 
 app.get("/api/departments", departmentController.getDepartments);
