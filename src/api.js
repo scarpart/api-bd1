@@ -4,6 +4,7 @@ const departmentController = require('./controllers/departmentController.js');
 const projectController = require('./controllers/projectController.js');
 const roleController = require('./controllers/roleController.js');
 const employeeRolesController = require('./controllers/employeeRolesController.js');
+const projectAssignmentController = require('./controllers/projectAssignmentsController.js');
 
 const app = express();
 
@@ -51,10 +52,15 @@ app.delete("/api/schedules/:id", scheduleController.deleteScheduleById);
 app.get("/api/employee-roles", employeeRolesController.getEmployeeRoles);
 app.get("/api/employee-roles/:id", employeeRolesController.getEmployeeRolesById);
 app.post("/api/employee-roles", employeeRolesController.createEmployeeRoles);
-app.put("/api/employee-roles", employeeRolesController.updateEmployeeRolesById);
+app.put("/api/employee-roles", employeeRolesController.updateEmployeeRole);
 app.delete("/api/employee-roles/:id", employeeRolesController.deleteEmployeeRolesById);
 
 // ProjectAssignments router 
+app.get("/api/project-assignments", projectAssignmentController.getProjectAssignments);
+app.get("/api/project-assignments/:id", projectAssignmentController.getProjectAssignmentById);
+app.post("/api/project-assignments", projectAssignmentController.createProjectAssignment);
+app.put("/api/project-assignments", projectAssignmentController.updateProjectAssignment);
+app.delete("/api/project-assignments/:id", projectAssignmentController.deleteProjectAssignmentById);
 
 export function run() {
 	app.listen(3000, () => {
