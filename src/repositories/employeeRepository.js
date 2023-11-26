@@ -1,4 +1,5 @@
 const pool = require('../db/db.js')
+const repoUtils = require('./utils.js');
 
 const getEmployees = async () => {
 	const query = "SELECT * FROM employees";
@@ -11,7 +12,7 @@ const getEmployeeById = async (employeeId) => {
 		const query = "SELECT * FROM employees WHERE employee_id = $1";
 		const values = [employeeId]; 
 
-		const displayQuery = createDisplayQuery(query, values);
+		const displayQuery = repoUtils.createDisplayQuery(query, values);
 		const { rows } = await pool.query(query, values);
 		return [rows, displayQuery];
 	} catch (error) {
@@ -56,9 +57,9 @@ const createEmployee = async (employee) => {
 			employee.email,
 		];
 		
-		const displayQuery = createDisplayQuery(query, values);
+		const displayQuery = repoUtils.createDisplayQuery(query, values);
 		const { id } = await pool.query(query, values);
-		return [id, query];
+		return [id, displayQuery];
 	} catch (error) {
 		console.log("Could not create employee:", error);
 		throw error
@@ -84,7 +85,7 @@ const updateEmployee = async (employeeId, updatedEmployee) => {
 		query += ` WHERE employee_id = $${valueCount + 1}`;
 		values.push(employeeId);
 
-		const displayQuery = createDisplayQuery(query, values);
+		const displayQuery = repoUtils.createDisplayQuery(query, values);
 		console.log("the end query is: ", displayQuery);
 
 		await pool.query(query, values);
@@ -100,7 +101,7 @@ const deleteEmployeeById = async (employeeId) => {
 		const query = "DELETE FROM employees WHERE employee_id = $1";
 		const values = [employeeId];
 
-		const displayQuery = createDisplayQuery(query, values);
+		const displayQuery = repoUtils.createDisplayQuery(query, values);
 		await pool.query(query, [employeeId]);
 
 		return [employeeId, displayQuery];
@@ -109,16 +110,6 @@ const deleteEmployeeById = async (employeeId) => {
 		throw error;
 	}
 }
-
-function createDisplayQuery(query, values) {
-    let index = 0;
-    return query.replace(/\$\d+/g, () => {
-        const value = values[index];
-        index++;
-        return typeof value === 'string' ? `'${value}'` : value;
-    });
-}
-
 
 module.exports = {
     getEmployees,

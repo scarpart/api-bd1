@@ -1,0 +1,10 @@
+
+.span-toggle {
+	width: 100%;
+	height: 75px;
+}
+
+.dropdown-menu {
+	position: static;
+	float: none;
+}
