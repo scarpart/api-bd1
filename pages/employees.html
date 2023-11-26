@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>Employees CRUD</title>
+		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+		<link rel="stylesheet" href="./scripts/index.css">
+		<script src="./scripts/htmx.min.js"></script>
+	</head>
+	<body>
+		<div class="container mt-5" align="center" style="width: 80%;">
+			<h1>Employees CRUD</h1>
+
+			<div class="dropdown other-content">
+				<button class="btn btn-secondary dropdown-toggle span-toggle"
+					type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+					POST Employee 	
+				</button>
+				<div class="dropdown-menu span-dropdown-main" aria-labelledby="dropdownMenuButton">
+					<div class="hidden-content p-3 span-dropdown-main">
+						
+						<!-- Your hidden HTML content here -->
+					</div>
+				</div>
+			</div>
+
+			<div class="dropdown other-content">
+				<button class="btn btn-secondary dropdown-toggle span-toggle"
+					type="button" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false">
+					POST Employee 	
+				</button>
+				<div class="dropdown-menu span-dropdown-main" aria-labelledby="dropdownMenuButton2">
+					<div class="hidden-content p-3 span-dropdown-main">
+						
+						<!-- Your hidden HTML content here -->
+					</div>
+				</div>
+			</div>
+
+		</div>
+		<script src="./scripts/bootstrap-5.0.2-dist/js/bootstrap.bundle.min.js"></script>
+		<script>
+			document.addEventListener('DOMContentLoaded', function () {
+				var dropdowns = document.querySelectorAll('.dropdown');
+
+				dropdowns.forEach(function (dropdown) {
+					dropdown.addEventListener('show.bs.dropdown', function () {
+						var dropdownMenu = this.querySelector('.dropdown-menu');
+						var dropdownMenuHeight = dropdownMenu.offsetHeight;
+
+						// Apply the height as a margin to the next element to push it down
+						var nextContent = this.nextElementSibling;
+						if (nextContent && nextContent.classList.contains('other-content')) {
+							nextContent.style.marginTop = dropdownMenuHeight + 'px';
+						}
+					});
+
+					dropdown.addEventListener('hide.bs.dropdown', function () {
+						// Reset the margin of the next element when the dropdown is hidden
+						var nextContent = this.nextElementSibling;
+						if (nextContent && nextContent.classList.contains('other-content')) {
+							nextContent.style.marginTop = '';
+						}
+					});
+				});
+			});
+		</script>
+	</body>
+</html>
