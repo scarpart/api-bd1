@@ -2,6 +2,7 @@ const express = require('express');
 const employeeController = require('./controllers/employeeController.js');
 const departmentController = require('./controllers/departmentController.js');
 const projectController = require('./controllers/projectController.js');
+const roleController = require('./controllers/roleController.js');
 
 const app = express();
 
@@ -30,6 +31,25 @@ app.get("/api/projects/info", projectController.getProjectInformation);
 app.post("/api/projects", projectController.createProject);
 app.put("/api/projects", projectController.updateProject);
 app.delete("/api/projects/:id", projectController.deleteProjectById);
+
+// Roles router 
+app.get("/api/roles", roleController.getRoles);
+app.get("/api/roles/:id", roleController.getRoleById);
+app.post("/api/roles", roleController.createRole);
+app.put("/api/roles", roleController.updateRole);
+app.delete("/api/roles/:id", roleController.deleteRoleById);
+
+// Schedules router 
+app.get("/api/schedules", scheduleController.getSchedules);
+app.get("/api/schedules/:id", scheduleController.getScheduleById);
+app.post("/api/schedules", scheduleController.createSchedule);
+app.put("/api/schedules", scheduleController.updateSchedule);
+app.delete("/api/schedules/:id", scheduleController.deleteScheduleById);
+
+// EmployeeRoles router 
+
+
+// ProjectAssignments router 
 
 export function run() {
 	app.listen(3000, () => {

@@ -64,3 +64,8 @@ ALTER TABLE "schedules"
 ALTER TABLE "project_assignments"
     ADD FOREIGN KEY ("project_id") REFERENCES "projects" ("project_id") ON DELETE CASCADE,
     ADD FOREIGN KEY ("employee_id") REFERENCES "employees" ("employee_id") ON DELETE CASCADE;
+
+
+
+
+
