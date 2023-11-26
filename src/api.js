@@ -17,7 +17,11 @@ app.delete("/api/employees/:id", employeeController.deleteEmployeeById);
 
 // Departments router 
 app.get("/api/departments", departmentController.getDepartments);
+app.get("/api/departments/:id", departmentController.getDepartmentById)
 app.get("/api/departments/total-expenses", departmentController.getSalaryExpensesByDepartment);
+app.post("/api/departments", departmentController.createDepartment);
+app.put("/api/departments", departmentController.updateDepartment);
+app.delete("/api/departments/:id", departmentController.deleteDepartmentById);
 
 // Projects router 
 app.get("/api/projects", projectController.getProjects);
