@@ -8,9 +8,9 @@ const getProjects = async () => {
 
 const getProjectBudgetAndAllocations = async () => {
 	try {
-		const query = "SELECT p.project_name AS ProjectName, \
+		const query = "SELECT p.project_name AS Project_Name, \
 			                  p.budget AS Budget, \
-                        	  COUNT(e.employee_id) AS NumberOfAssignees \
+                        	  COUNT(e.employee_id) AS Number_Of_Assignees \
                        FROM projects AS p \
                        JOIN project_assignments AS pa ON pa.project_id = p.project_id \
                        JOIN employees AS e ON e.employee_id = pa.employee_id \
