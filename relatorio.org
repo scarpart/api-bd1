@@ -1,0 +1,224 @@
+#+title: Relatório do Trabalho Final
+#+subtitle: Disciplina de Banco de Dados I
+#+author: Arthur Scarpatto Rodrigues, Leonardo Luiz Gambalonga
+#+LATEX_HEADER: \usepackage{titlesec}
+#+LATEX_HEADER: \usepackage[margin=1in]{geometry}
+#+LATEX_HEADER: \usepackage{amsmath}
+#+LATEX_HEADER: \usepackage{amssymb}
+#+LATEX_HEADER: \usepackage{forest}
+#+LATEX_HEADER: \titleformat{\section}{\bfseries\Large\centering}{\thesection.}{1em}{}[\titlerule]
+#+LATEX_HEADER: \titleformat{\subsection}{\bfseries\large}{\thesubsection.}{1em}{}
+#+LATEX_HEADER: \setcounter{secnumdepth}{5}
+#+LATEX_HEADER: \titleformat{\paragraph}[runin]{\normalfont\normalsize\bfseries}{}{0em}{}[:]
+#+LATEX_HEADER: \newcommand{\inlinesubsubsubsection}[1]{\par\noindent\textbf{#1.}\quad}
+
+\tableofcontents
+
+* Sistema de Gerenciamento de RH 
+  Nosso trabalho segue o esquema de um software de gerenciamento de RH simples, 
+  que oferece recursos à empresa para considerar seus custos, tempo, e alocar recursos efetivamente.
+
+** Descrição do Objetivo Geral do Sistema
+   O objetivo do sistema é providenciar um sistema de gerenciamento de RH de uma
+   empresa fictícia, onde constam dados sobre os funcionários, sobre a hierarquia
+   de comando, compensação, calendários, projetos e alocações de fundos, horários
+   de projetos e de funcionários, alocação de tempo e funcionários para projetos
+   específicos, assim como algumas outras funcionalidades, seguindo o mesmo padrão.
+
+** Descrição Detalhada do Sistema 
+   O sistema contém sete tabelas, que giram em torno da tabela principal, /employees/, 
+   responsável por armazenar dados de funcionários específicos. As outras tem como objetivo
+   tratar da alocação de tempo e recursos para projetos, quais funções os funcionários desempenham,
+   e seus horários individuais. Seguem abaixo as especificações técnicas de cada tabela.
+
+*** Tabela /employees/
+	A tabela /employees/ tem como colunas os seguintes valores:
+	
+	\begin{table}[h!]
+	\centering
+	\begin{tabular}{|l|l|l|l|}
+	\hline
+	\textbf{Nome da Coluna} & \textbf{Tipo} & \textbf{Modificadores} & \textbf{Referencia} \\
+	\hline
+	employee\_id     & serial  & PRIMARY KEY      & \\
+	department\_id   & integer & NOT NULL         & departments (FK) \\
+	name             & varchar & NOT NULL         & \\
+	salary           & integer & NOT NULL         & \\
+	date\_of\_birth  & date    & NOT NULL         & \\
+	gender           & varchar &                  & \\
+	contact\_number  & varchar &                  & \\
+	email            & varchar & NOT NULL         & \\
+	\hline
+	\end{tabular}
+	\caption{Informações técnicas sobre a tabela \textit{employees}.}
+	\label{table:employees}
+	\end{table}
+	
+	A tabela tem uma chave estrangeira para a tabela /departments/, a ser discutida a diante. 
+	Essa relação é uma */many-to-one/*, já que vários funcionários podem estar associados a um único departamento cada.
+	
+	A maioria das colunas é auto-explicatória, de acordo com seus nomes, em relação à função que desempenham.
+	Vale mencionar que /gender/ e /contact-number/ não são necessários admnistrativamente 
+	(no caso de /contact-number/, porque já temos o /email/), 
+	e os funcionários podem preferir não mencioná-las, então são consideradas anuláveis.
+
+
+*** Tabela /departments/
+	Essa é uma tabela simples que contém informações básicas sobre o departamento, 
+	para fins de organização. Segue abaixo sua especificação:
+
+	\begin{table}[h!]
+	\centering
+	\begin{tabular}{|l|l|l|l|}
+	\hline
+	\textbf{Nome da Coluna} & \textbf{Tipo} & \textbf{Modificadores} & \textbf{Referencia} \\
+	\hline
+	department\_id   & serial & PRIMARY KEY &  \\
+	department\_name & varchar & NOT NULL &  \\
+	\hline
+	\end{tabular}
+	\caption{Informações técnicas sobre a tabela \textit{departments}.}
+	\label{table:departments}
+	\end{table}
+
+	Essa tabela não contém referências a nenhuma outra. 
+	Também não contém nenhum **CASCADE** associado,
+	já que podemos fechar um departamento sem necessáriamente demitir os funcionários.
+
+*** Tabela /roles/
+	Outra simples tabela que contém informações sobre as funções que podem estar associadas a um certo funcionário,
+	de acordo com a especificação abaixo:
+
+	\begin{table}[h!]
+	\centering
+	\begin{tabular}{|l|l|l|l|}
+	\hline
+	\textbf{Nome da Coluna} & \textbf{Tipo} & \textbf{Modificadores} & \textbf{Referencia} \\
+	\hline
+	role\_id   & serial & PRIMARY KEY &  \\
+	role\_name & varchar & NOT NULL &  \\
+	\hline
+	\end{tabular}
+	\caption{Informações técnicas sobre a tabela \textit{roles}.}
+	\label{table:roles}
+	\end{table}
+
+	Também não referencia nenhuma outra tabela. 
+	No entanto, possui efeito de **CASCADE** ao ser deletada uma entrada,
+	efetivamente deletando a(s) entrada(s) correspondente(s) na tabela 
+	/employee\textunderscore roles/, que representa uma associação */many-to-many/*
+	entre /employees/ e /roles/.
+
+	Nesse sentido, /employee\textunderscore roles/ representa uma função de */many-to-one/* 
+	para com /roles/, já que cada entrada na primeira tabela contém uma referência
+	para alguma entrada da segunda.
+
+*** Tabela /employee\textunderscore roles/
+	Como dito anteriormente, essa tabela representa uma relação */many-to-many/* 
+	entre /employees/ e /roles/. Dessa maneira, vários funcionários podem desempenhar
+	vários papéis na empresa, e vários papéis podem ser desempenhados por vários funcionários.
+
+	\begin{table}[h!]
+	\centering
+	\begin{tabular}{|l|l|l|l|}
+	\hline
+	\textbf{Nome da Coluna} & \textbf{Tipo} & \textbf{Modificadores} & \textbf{Referencia} \\
+	\hline
+	employee\_role\_id   & serial  & PRIMARY KEY &  \\
+	employee\_id         & integer & NOT NULL    & employees (FK)  \\
+	role\_id             & integer & NOT NULL    & roles (FK)  \\
+	start\_date          & date    & NOT NULL    & \\
+	end\_date          & date    & NOT NULL    & \\
+	\hline
+	\end{tabular}
+	\caption{Informações técnicas sobre a tabela \textit{employee\textunderscore roles}.}
+	\label{table:employee-roles}
+	\end{table}
+
+	Não possui efeito de **CASCADE** próprio, mas é deletada caso uma entrada
+	da tabela /roles/ ou uma da tabela /employees/ seja deletada, pois não faz sentido
+	existir uma associação de um funcionário com uma função se algum dos dois não existe.
+
+*** Tabela /schedules/
+	Representa os horários dos funcionários e os dias em que começaram a trabalhar/dias em que vão acabar,
+	ou sair da empresa. Essa última informação, claro, pode ser anulável, pois na maioria dos casos, não se sabe
+	ao certo previamente quanto tempo um funcionário vai ficar na empresa.
+
+	\begin{table}[h!]
+	\centering
+	\begin{tabular}{|l|l|l|l|}
+	\hline
+	\textbf{Nome da Coluna} & \textbf{Tipo} & \textbf{Modificadores} & \textbf{Referencia} \\
+	\hline
+	schedule\_id   & serial  & PRIMARY KEY &  \\
+	employee\_id         & integer & NOT NULL    & employees (FK)  \\
+	start\_date          & date    & NOT NULL    & \\
+	end\_date          & date    & & \\
+	start\_time          & timestamp    & NOT NULL    & \\
+	end\_time        & timestamp    & & \\ 
+	\hline
+	\end{tabular}
+	\caption{Informações técnicas sobre a tabela \textit{schedules}.}
+	\label{table:schedules}
+	\end{table}
+
+	Aqui, o /start\textunderscore time/ e /end\textunderscore time/ se referem aos horários de um funcionário, em um determinado dia.
+
+	A tabela /schedules/ é deletada por efeito de *CASCADE* caso alguma entrada de /employees/ seja 
+	deletada. Nessa tabela, temos uma relação de */many-to-one/* para com /employees/.
+
+*** Tabela /projects/
+	Essa tabela representa projetos desenvolvidos pela empresa, assim como suas respectivas
+	verbas, e metadados como a data de inicio e data de fim prevista (opcional).
+
+	\begin{table}[h!]
+	\centering
+	\begin{tabular}{|l|l|l|l|}
+	\hline
+	\textbf{Nome da Coluna} & \textbf{Tipo} & \textbf{Modificadores} & \textbf{Referencia} \\
+	\hline
+	project\_id   & serial  & PRIMARY KEY &  \\
+	project\_name         & varchar & NOT NULL    & \\
+	budget & integer & NOT NULL & \\
+	start\_date          & date    & NOT NULL    & \\
+	end\_date          & date    & & \\
+	\hline
+	\end{tabular}
+	\caption{Informações técnicas sobre a tabela \textit{projects}.}
+	\label{table:projects}
+	\end{table}
+
+	A tabela /projects/ possui efeito de **CASCADE** em relação à tabela /project\textunderscore assignments/,
+	que representa uma relação */many-to-many/* de /employees/ para /projects/.
+	Dessa forma, /project\textunderscore assignments/ também relaciona um papel de */many-to-one/* para com
+	/projects/.
+
+*** Tabela /project\textunderscore assignments/
+	Como dito anteriormente, essa tabela representa um */many-to-many/* de /employees/ e /projects/,
+	com a função lógica de que um funcionário pode estar em vários projetos, e um projeto pode  
+	ser executado por vários funcionários.
+
+	\begin{table}[h!]
+	\centering
+	\begin{tabular}{|l|l|l|l|}
+	\hline
+	\textbf{Nome da Coluna} & \textbf{Tipo} & \textbf{Modificadores} & \textbf{Referencia} \\
+	\hline
+	assignment\_id   & serial  & PRIMARY KEY &  \\
+	project\_id         & integer & NOT NULL    & projects (FK) \\
+	employee\_id & integer & NOT NULL & employees (FK) \\
+	assigned\_at          & date    & DEFAULT CURRENT\_DATE & \\
+	\hline
+	\end{tabular}
+	\caption{Informações técnicas sobre a tabela \textit{project\textunderscore assignments}.}
+	\label{table:project-assignments}
+	\end{table}
+
+	Aqui, /assigned\textunderscore at/ significa a data em que um funcionário foi alocado para um dado projeto.
+
+	Essa tabela sofre efeitos de **CASCADE** tanto de /employees/ quanto de /projects/:
+	se alguma entrada em uma dessas tabelas for deletada, e tiver entradas relacionadas
+	em /project\textunderscore assignments/, então essas entradas também serão deletadas.
+
+	
+

@@ -31,9 +31,9 @@ CREATE TABLE "schedules" (
     "schedule_id" serial PRIMARY KEY,
     "employee_id" integer NOT NULL,
     "start_date" date NOT NULL,
-    "end_date" date NOT NULL,
+    "end_date" date,
     "start_time" timestamp NOT NULL,
-    "end_time" timestamp NOT NULL
+    "end_time" timestamp
 );
 
 CREATE TABLE "projects" (
