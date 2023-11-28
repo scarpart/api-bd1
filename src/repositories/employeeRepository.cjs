@@ -23,9 +23,11 @@ const getEmployeeById = async (employeeId) => {
 
 const getEmployeeAndRoleInformation = async () => {
 	try {
-		const query = "SELECT e.*, r.role_name FROM employees AS e \
-                       JOIN employee_roles AS er ON er.employee_id = e.employee_id \
-                       LEFT JOIN roles AS r ON er.role_id = r.role_id";
+		const query = "SELECT e.*, STRING_AGG(r.role_name, ', ') AS roles \
+					   FROM employees AS e \
+					   JOIN employee_roles AS er ON er.employee_id = e.employee_id \
+					   LEFT JOIN roles AS r ON er.role_id = r.role_id \
+					   GROUP BY e.employee_id;";
 		const { rows } = await pool.query(query);
 		return [rows, query];
 	} catch (error) {

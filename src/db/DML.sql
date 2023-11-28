@@ -31,14 +31,21 @@ INSERT INTO "employees" ("department_id", "name", "salary", "date_of_birth", "ge
 -- Inserting data into 'employee_roles'
 INSERT INTO "employee_roles" ("employee_id", "role_id", "start_date", "end_date") VALUES
 	(1, 1, '2020-01-01', NULL),
+	(1, 2, '2020-01-01', NULL),
+	(1, 3, '2020-01-01', NULL),
 	(2, 1, '2020-01-01', NULL),
+	(2, 3, '2020-01-01', NULL),
+	(2, 4, '2020-01-01', NULL),
 	(3, 1, '2020-01-01', NULL),
 	(4, 1, '2020-01-01', NULL),
 	(5, 2, '2021-01-01', NULL),
+	(5, 1, '2021-01-01', NULL),
 	(6, 3, '2021-02-01', NULL),
 	(7, 3, '2021-03-01', NULL),
 	(8, 2, '2021-04-01', NULL),
 	(9, 2, '2021-02-01', NULL),
+	(9, 1, '2021-02-01', NULL),
+	(9, 3, '2021-02-01', NULL),
 	(10, 4, '2021-03-01', NULL),
 	(11, 2, '2021-04-01', NULL),
 	(12, 2, '2021-04-01', NULL);

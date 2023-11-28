@@ -305,6 +305,8 @@ ALTER TABLE "project_assignments"
     ADD FOREIGN KEY ("employee_id") REFERENCES "employees" ("employee_id") ON DELETE CASCADE;
 #+END_SRC
 
+
+
 ** /Script/ - /Data Manipulation Language/ (DML)
    Segue abaixo o /script/ DML de população das tabelas e campos do nosso banco de dados.
 
@@ -548,7 +550,7 @@ INSERT INTO "project_assignments" ("project_id", "employee_id") VALUES
 	que trabalham naquele projeto.
 
 *** Terceira Consulta - Obter Informações de Empregados e Suas Funções  
-	Como primeira consulta, resolvemos apresentar um simples sumário 
+	Como última consulta, resolvemos apresentar um simples sumário 
 	dos dados de funcionários individuais e as funções desempenhadas pelos mesmos
 	dentro da empresa. Isso proporciona a gestão e visualização de dados de um
 	funcionário específico em função do que ele faz em seu dia a dia no trabalho.
@@ -557,11 +559,16 @@ INSERT INTO "project_assignments" ("project_id", "employee_id") VALUES
 	Essas cláusulas associam funcionários específicos com suas respectivas funções, já que
 	/employee\textunderscore roles/ é uma tabela representante de uma relação */many-to-many/* 
 	entre /employees/ e /roles/. 
+
+	A função de agregação *STRING\textunderscore AGG* simplesmente junta as ocorrências de /roles/
+	em uma única linha de resposta, agrupando-as ao separá-las por vírgulas.
  
 	#+BEGIN_SRC sql
-	SELECT e.*, r.role_name FROM employees AS e 
+	SELECT e.*, STRING_AGG(r.role_name, ', ') AS roles 
+	FROM employees AS e 
 	JOIN employee_roles AS er ON er.employee_id = e.employee_id 
-	LEFT JOIN roles AS r ON er.role_id = r.role_id;
+	LEFT JOIN roles AS r ON er.role_id = r.role_id 
+	GROUP BY e.employee_id;
 	#+END_SRC 
 
 	Um exemplo pode ser obtido ao fazer uma requisição **GET** 
@@ -574,126 +581,137 @@ INSERT INTO "project_assignments" ("project_id", "employee_id") VALUES
 
 	#+BEGIN_SRC json
 	{
-		"employee_id": 1,
-		"department_id": 1,
-		"name": "John Doe",
-		"salary": 100000,
-		"date_of_birth": "1980-01-15T03:00:00.000Z",
-		"gender": "Male",
-		"contact_number": "555-0101",
-		"email": "john.doe@example.com",
-		"role_name": "Manager"
-	},
-	{
-		"employee_id": 2,
-		"department_id": 2,
-		"name": "Jane Smith",
-		"salary": 15000,
-		"date_of_birth": "1985-05-20T03:00:00.000Z",
-		"gender": "Female",
-		"contact_number": "555-0102",
-		"email": "jane.smith@example.com",
-		"role_name": "Manager"
-	},
-	{
-		"employee_id": 3,
-		"department_id": 3,
-		"name": "Alice Johnson",
-		"salary": 10000,
-		"date_of_birth": "1990-07-25T03:00:00.000Z",
-		"gender": "Female",
-		"contact_number": "555-0103",
-		"email": "alice.johnson@example.com",
-		"role_name": "Manager"
-	},
-	{
 		"employee_id": 4,
 		"department_id": 4,
 		"name": "Marie Johnson",
 		"salary": 22000,
-		"date_of_birth": "1990-07-25T03:00:00.000Z",
+		"date_of_birth": "1990-07-25T00:00:00.000Z",
 		"gender": "Female",
 		"contact_number": "555-0104",
 		"email": "marie.jhn@example.com",
-		"role_name": "Manager"
-	},
-	{
-		"employee_id": 5,
-		"department_id": 1,
-		"name": "Julie Smith",
-		"salary": 34500,
-		"date_of_birth": "1999-01-20T02:00:00.000Z",
-		"gender": "Female",
-		"contact_number": "555-0105",
-		"email": "julsmith@example.com",
-		"role_name": "Developer"
-	},
-	{
-		"employee_id": 6,
-		"department_id": 2,
-		"name": "Johnathan Lima",
-		"salary": 17500,
-		"date_of_birth": "2001-08-01T03:00:00.000Z",
-		"gender": "Male",
-		"contact_number": "555-0106",
-		"email": "jlima123@example.com",
-		"role_name": "Analyst"
-	},
-	{
-		"employee_id": 7,
-		"department_id": 4,
-		"name": "Lian Bark",
-		"salary": 3500,
-		"date_of_birth": "2002-03-27T03:00:00.000Z",
-		"gender": "Male",
-		"contact_number": "555-0107",
-		"email": "barklian@example.com",
-		"role_name": "Analyst"
-	},
-	{
-		"employee_id": 8,
-		"department_id": 3,
-		"name": "Oswald Guy",
-		"salary": 3000,
-		"date_of_birth": "2000-07-07T03:00:00.000Z",
-		"gender": "Male",
-		"contact_number": "555-0108",
-		"email": "oswaldguy@example.com",
-		"role_name": "Developer"
-	},
-	{
-		"employee_id": 9,
-		"department_id": 1,
-		"name": "Evan Peters",
-		"salary": 45000,
-		"date_of_birth": "1988-04-15T03:00:00.000Z",
-		"gender": "Male",
-		"contact_number": "555-0110",
-		"email": "evan.peters@example.com",
-		"role_name": "Developer"
+		"roles": "Manager"
 	},
 	{
 		"employee_id": 10,
 		"department_id": 2,
 		"name": "Sara Connor",
 		"salary": 20000,
-		"date_of_birth": "1992-12-20T02:00:00.000Z",
+		"date_of_birth": "1992-12-20T00:00:00.000Z",
 		"gender": "Female",
 		"contact_number": "555-0111",
 		"email": "s.connor@example.com",
-		"role_name": "Administrator"
+		"roles": "Administrator"
+	},
+	{
+		"employee_id": 6,
+		"department_id": 2,
+		"name": "Johnathan Lima",
+		"salary": 17500,
+		"date_of_birth": "2001-08-01T00:00:00.000Z",
+		"gender": "Male",
+		"contact_number": "555-0106",
+		"email": "jlima123@example.com",
+		"roles": "Analyst"
+	},
+	{
+		"employee_id": 2,
+		"department_id": 2,
+		"name": "Jane Smith",
+		"salary": 15000,
+		"date_of_birth": "1985-05-20T00:00:00.000Z",
+		"gender": "Female",
+		"contact_number": "555-0102",
+		"email": "jane.smith@example.com",
+		"roles": "Manager, Analyst, Administrator"
 	},
 	{
 		"employee_id": 11,
 		"department_id": 3,
 		"name": "Raj Patel",
 		"salary": 5500,
-		"date_of_birth": "1995-09-30T03:00:00.000Z",
+		"date_of_birth": "1995-09-30T00:00:00.000Z",
 		"gender": "Male",
 		"contact_number": "555-0112",
 		"email": "raj.patel@example.com",
-		"role_name": "Developer"
-	}
+		"roles": "Developer"
+	},
+	{
+		"employee_id": 9,
+		"department_id": 1,
+		"name": "Evan Peters",
+		"salary": 45000,
+		"date_of_birth": "1988-04-15T00:00:00.000Z",
+		"gender": "Male",
+		"contact_number": "555-0110",
+		"email": "evan.peters@example.com",
+		"roles": "Developer, Manager, Analyst"
+	},
+	{
+		"employee_id": 3,
+		"department_id": 3,
+		"name": "Alice Johnson",
+		"salary": 10000,
+		"date_of_birth": "1990-07-25T00:00:00.000Z",
+		"gender": "Female",
+		"contact_number": "555-0103",
+		"email": "alice.johnson@example.com",
+		"roles": "Manager"
+	},
+	{
+		"employee_id": 12,
+		"department_id": 4,
+		"name": "Luna Star",
+		"salary": 7000,
+		"date_of_birth": "1986-11-05T00:00:00.000Z",
+		"gender": "Female",
+		"contact_number": "555-0113",
+		"email": "luna.star@example.com",
+		"roles": "Developer"
+	},
+	{
+		"employee_id": 5,
+		"department_id": 1,
+		"name": "Julie Smith",
+		"salary": 34500,
+		"date_of_birth": "1999-01-20T00:00:00.000Z",
+		"gender": "Female",
+		"contact_number": "555-0105",
+		"email": "julsmith@example.com",
+		"roles": "Developer, Manager"
+	},
+	{
+		"employee_id": 7,
+		"department_id": 4,
+		"name": "Lian Bark",
+		"salary": 3500,
+		"date_of_birth": "2002-03-27T00:00:00.000Z",
+		"gender": "Male",
+		"contact_number": "555-0107",
+		"email": "barklian@example.com",
+		"roles": "Analyst"
+	},
+	{
+		"employee_id": 1,
+		"department_id": 1,
+		"name": "John Doe",
+		"salary": 50000,
+		"date_of_birth": "1980-01-15T00:00:00.000Z",
+		"gender": "Male",
+		"contact_number": "555-0101",
+		"email": "john.doe@example.com",
+		"roles": "Manager, Developer, Analyst"
+	},
+	{
+		"employee_id": 8,
+		"department_id": 3,
+		"name": "Oswald Guy",
+		"salary": 3000,
+		"date_of_birth": "2000-07-07T00:00:00.000Z",
+		"gender": "Male",
+		"contact_number": "555-0108",
+		"email": "oswaldguy@example.com",
+		"roles": "Developer"
+    }	
 	#+END_SRC
 
 
