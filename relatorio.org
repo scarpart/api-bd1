@@ -224,7 +224,13 @@
    Aqui vai a modelagem conceitual da paradinha mermão i love org
 
 ** Modelagem Lógica
-   Aqui vai a modelagem lógica da paradinha i love org again. 
+   Segue abaixo uma imagem representando a modelagem lógica do nosso trabalho final.
+   A mesma pode ser encontrada no diretório base deste trabalho.
+
+   #+attr_latex: :width 0.15 :scale 0.15
+   #+LABEL: fig:logico
+   #+NAME: fig:logico
+   [[./Modelo Lógico.drawio.svg]]
 
 ** /Script/ - /Data Definition Language/ (DDL)
    Segue abaixo o /script/ DDL de criação das tabelas e relacionamentos 
