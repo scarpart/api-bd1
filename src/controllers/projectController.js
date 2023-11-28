@@ -2,9 +2,10 @@ const projectRepository = require('../repositories/projectRepository.js');
 
 const getProjects = async (req, res) => {
     try {
-        let [projs, query] = await departmentRepository.getEmployees();
+        let [projs, query] = await projectRepository.getProjects();
 		res.status(200).send({ projs, query });
     } catch (error) {
+		console.log("controller error:", error);
         res.status(500).send("Error getting projects from the server.");
     } 
 };
@@ -35,6 +36,7 @@ const createProject = async (req, res) => {
 		let [id, query] = await projectRepository.createProject(project);
 		res.status(201).send({ id, query });
 	} catch (error) {
+		console.log("controller error:", error);
 		res.status(500).send("Error creating the project.");
 	}
 }
@@ -42,8 +44,7 @@ const createProject = async (req, res) => {
 const updateProject = async (req, res) => {
     try {
         const updatedProject = req.body;
-        const projectId = req.body.projectId; 
-		delete updatedProject.projectId;
+        const projectId = req.params.id; 
 
         let [id, query] = await projectRepository.updateProject(projectId, updatedProject);
         res.status(200).send({ id, query });

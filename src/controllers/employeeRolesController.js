@@ -12,7 +12,7 @@ const getEmployeeRoles = async (req, res) => {
 const getEmployeeRolesById = async (req, res) => {
 	try {
 		const employeeRoleId = req.params.id;
-		let [employeeRole, query] = await employeeRoleRepository.getEmployeRoleById(employeeRoleId);
+		let [employeeRole, query] = await employeeRoleRepository.getEmployeeRoleById(employeeRoleId);
 		res.status(200).send({ employeeRole, query })
 	} catch (error) {
 		console.log("controller error: ", error);
@@ -33,8 +33,7 @@ const createEmployeeRole = async (req, res) => {
 const updateEmployeeRole = async (req, res) => {
     try {
         const updatedRole = req.body;
-        const employeeRoleId = req.body.employeeRoleId; 
-		delete updatedRole.employeeRoleId;
+        const employeeRoleId = req.params.id; 
 
         let [id, query] = await employeeRoleRepository.updateEmployeeRole(employeeRoleId, updatedRole);
         res.status(200).send({ id, query });

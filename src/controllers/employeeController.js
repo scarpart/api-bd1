@@ -42,8 +42,7 @@ const createEmployee = async (req, res) => {
 const updateEmployee = async (req, res) => {
     try {
         const updatedEmployee = req.body;
-        const employeeId = req.body.employeeId; 
-		delete updatedEmployee.employeeId;
+        const employeeId = req.params.id; 
 
         let [id, query] = await employeeRepository.updateEmployee(employeeId, updatedEmployee);
         res.status(200).send({ id, query });

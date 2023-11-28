@@ -24,6 +24,10 @@ const getEmployeeRoleById = async (employeeRoleId) => {
 const createEmployeeRole = async (employeeRole) => {
 	try {
 		let query = `INSERT INTO employee_roles ( \
+					employee_id, \
+					role_id, \
+					start_date, \
+					end_date \
 				) VALUES ($1, $2, $3, $4) \
 					RETURNING employee_role_id`;
 

@@ -2,7 +2,7 @@ const departmentRepository = require('../repositories/departmentRepository.js');
 
 const getDepartments = async (req, res) => {
     try {
-        const [departments, query] = await departmentRepository.getEmployees();
+        const [departments, query] = await departmentRepository.getDepartments();
         res.status(200).send({ departments, query });
     } catch (error) {
 		console.log("controller error:", error);
@@ -45,8 +45,7 @@ const createDepartment = async (req, res) => {
 const updateDepartment = async (req, res) => {
     try {
         const updated = req.body;
-        const departmentId = req.body.departmentId; 
-		delete updated.departmentId;
+        const departmentId = req.params.id; 
 
         let [id, query] = await departmentRepository.updateDepartment(departmentId, updated);
         res.status(200).send({ id, query });

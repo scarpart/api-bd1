@@ -1,3 +1,4 @@
+const repoUtils = require('./utils.js');
 const pool = require('../db/db.js')
 
 const getRoles = async () => {

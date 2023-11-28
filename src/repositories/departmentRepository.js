@@ -1,7 +1,8 @@
+const repoUtils = require('./utils.js');
 const pool = require('../db/db.js')
 
 const getDepartments = async () => {
-	const query = "SELECT * FROM deparments";
+	const query = "SELECT * FROM departments";
     const { rows } = await pool.query(query); 
     return [rows, query];
 };

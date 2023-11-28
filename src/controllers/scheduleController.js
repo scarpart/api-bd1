@@ -33,8 +33,7 @@ const createSchedule = async (req, res) => {
 const updateSchedule = async (req, res) => {
     try {
         const updatedSchedule = req.body;
-        const scheduleId = req.body.scheduleId; 
-		delete updatedSchedule.scheduleId;
+        const scheduleId = req.params.id; 
 
         let [id, query] = await scheduleRepository.updateSchedule(scheduleId, updatedSchedule);
         res.status(200).send({ id, query });

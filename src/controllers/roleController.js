@@ -33,8 +33,7 @@ const createRole = async (req, res) => {
 const updateRole = async (req, res) => {
     try {
         const updatedRole = req.body;
-        const roleId = req.body.roleId; 
-		delete updatedRole.roleId;
+        const roleId = req.params.id; 
 
         let [id, query] = await roleRepository.updateRole(roleId, updatedRole);
         res.status(200).send({ id, query });
