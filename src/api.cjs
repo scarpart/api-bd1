@@ -1,11 +1,11 @@
 const express = require('express');
-const employeeController = require('./controllers/employeeController.js');
-const departmentController = require('./controllers/departmentController.js');
-const projectController = require('./controllers/projectController.js');
-const roleController = require('./controllers/roleController.js');
-const employeeRolesController = require('./controllers/employeeRolesController.js');
-const projectAssignmentController = require('./controllers/projectAssignmentsController.js');
-const scheduleController = require('./controllers/scheduleController.js');
+const employeeController = require('./controllers/employeeController.cjs');
+const departmentController = require('./controllers/departmentController.cjs');
+const projectController = require('./controllers/projectController.cjs');
+const roleController = require('./controllers/roleController.cjs');
+const employeeRolesController = require('./controllers/employeeRolesController.cjs');
+const projectAssignmentController = require('./controllers/projectAssignmentsController.cjs');
+const scheduleController = require('./controllers/scheduleController.cjs');
 
 const app = express();
 
@@ -63,8 +63,12 @@ app.post("/api/project-assignments", projectAssignmentController.createProjectAs
 app.put("/api/project-assignments/pa/:id", projectAssignmentController.updateProjectAssignment);
 app.delete("/api/project-assignments/pa/:id", projectAssignmentController.deleteProjectAssignmentById);
 
-export function run() {
+const run = () => {
 	app.listen(3000, () => {
 		console.log('Server is running on port 3000.');
 	});
-}
+};
+
+module.exports =  {
+	run,
+};

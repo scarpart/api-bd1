@@ -1,4 +1,4 @@
-const employeeRoleRepository = require('../repositories/employeeRoleRepository.js');
+const employeeRoleRepository = require('../repositories/employeeRoleRepository.cjs');
 
 const getEmployeeRoles = async (req, res) => {
     try {
