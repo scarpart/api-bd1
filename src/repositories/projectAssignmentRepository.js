@@ -1,3 +1,4 @@
+const repoUtils = require('./utils.js');
 const pool = require('../db/db.js')
 
 const getProjectAssignments = async () => {
@@ -23,8 +24,8 @@ const getProjectAssignmentById = async (id) => {
 const createProjectAssignment = async (projectAssignment) => {
 	try {
 		let query = `INSERT INTO project_assignments ( \
-					project_id,
-					employee_id,
+					project_id, \
+					employee_id
 				) VALUES ($1, $2) \
 					RETURNING assignment_id`;
 		let values = [

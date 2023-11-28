@@ -1,9 +1,15 @@
+const repoUtils = require('./utils.js');
 const pool = require('../db/db.js')
 
 const getProjects = async () => {
-	const query = "SELECT * FROM projects";
-    const { rows } = await pool.query(query); 
-    return [rows, query];
+	try {
+		const query = "SELECT * FROM projects";
+		const { rows } = await pool.query(query); 
+		return [rows, query];
+	} catch (error) {
+		console.log("error getting projects:", error);
+		throw error;
+	}
 };
 
 const getProjectBudgetAndAllocations = async () => {
@@ -44,7 +50,7 @@ const createProject = async (project) => {
 					project_name, \
 					budget, \
 					start_date, \
-					end_date, \
+					end_date \
 				) VALUES ($1, $2, $3, $4) \
 					RETURNING project_id`;
 

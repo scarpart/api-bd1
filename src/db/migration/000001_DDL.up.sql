@@ -48,7 +48,7 @@ CREATE TABLE "project_assignments" (
     "assignment_id" serial PRIMARY KEY,
     "project_id" integer NOT NULL,
     "employee_id" integer NOT NULL,
-    "assigned_at" date DEFAULT CURRENT_DATE,
+    "assigned_at" date DEFAULT CURRENT_DATE
 );
 
 ALTER TABLE "employees"

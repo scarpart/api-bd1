@@ -1,3 +1,4 @@
+const repoUtils = require('./utils.js');
 const pool = require('../db/db.js')
 
 const getSchedules = async () => {
@@ -23,11 +24,11 @@ const getScheduleById = async (id) => {
 const createSchedule = async (schedule) => {
 	try {
 		let query = `INSERT INTO schedules ( \
-					employee_id,
-					start_date,
-					end_date,
-					start_time,
-					end_time,
+					employee_id, \
+					start_date, \
+					end_date, \
+					start_time, \
+					end_time \
 				) VALUES ($1, $2, $3, $4, $5) \
 					RETURNING schedule_id`;
 		let values = [
