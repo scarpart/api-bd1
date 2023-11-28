@@ -1,5 +1,5 @@
-const repoUtils = require('./utils.js');
-const pool = require('../db/db.js')
+const repoUtils = require('./utils.cjs');
+const pool = require('../db/db.cjs')
 
 const getDepartments = async () => {
 	const query = "SELECT * FROM departments";

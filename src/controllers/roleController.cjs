@@ -1,4 +1,4 @@
-const roleRepository = require('../repositories/roleRepository.js');
+const roleRepository = require('../repositories/roleRepository.cjs');
 
 const getRoles = async (req, res) => {
     try {

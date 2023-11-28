@@ -1,4 +1,4 @@
-const projectRepository = require('../repositories/projectRepository.js');
+const projectRepository = require('../repositories/projectRepository.cjs');
 
 const getProjects = async (req, res) => {
     try {

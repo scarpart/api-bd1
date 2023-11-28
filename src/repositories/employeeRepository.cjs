@@ -1,5 +1,5 @@
-const pool = require('../db/db.js')
-const repoUtils = require('./utils.js');
+const pool = require('../db/db.cjs')
+const repoUtils = require('./utils.cjs');
 
 const getEmployees = async () => {
 	const query = "SELECT * FROM employees";

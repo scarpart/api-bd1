@@ -1,4 +1,4 @@
-const departmentRepository = require('../repositories/departmentRepository.js');
+const departmentRepository = require('../repositories/departmentRepository.cjs');
 
 const getDepartments = async (req, res) => {
     try {

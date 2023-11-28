@@ -1,4 +1,4 @@
-const projectAssignmentRepository = require('../repositories/projectAssignmentRepository.js');
+const projectAssignmentRepository = require('../repositories/projectAssignmentRepository.cjs');
 
 const getProjectAssignments = async (req, res) => {
     try {

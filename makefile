@@ -1,25 +1,28 @@
 createdb:
-	docker exec -it postgres16-bd createdb --username=criciumenses --owner=criciumenses employeeManagement
+	docker-compose exec db createdb --username=criciumenses --owner=criciumenses employeeManagement
 
 dropdb:
-	docker exec -it postgres16-bd dropdb --username=criciumenses employeeManagement
+	docker-compose exec db dropdb --username=criciumenses employeeManagement
 
 setpass:
-	docker exec -it postgres16-bd psql -U criciumenses -d employeeManagement -c "ALTER USER criciumenses WITH PASSWORD 'CriciumaNaSerieA';" -c "\q"
+	docker-compose exec db psql -U criciumenses -d employeeManagement -c "ALTER USER criciumenses WITH PASSWORD 'CriciumaNaSerieA';" -c "\q"
 
 exec:
-	docker exec -it postgres16-bd psql -U criciumenses -d employeeManagement 
+	docker-compose exec db psql -U criciumenses -d employeeManagement 
 
 dml-script:
-	cat src/db/DML.sql | docker exec -i postgres16-bd psql -U criciumenses -d employeeManagement
+	cat src/db/DML.sql | docker-compose exec -T db psql -U criciumenses -d employeeManagement
 
 migrateup:
-	migrate -path src/db/migration -database "postgresql://criciumenses:CriciumaNaSerieA@localhost:7654/employeeManagement?sslmode=disable" -verbose up
+	docker-compose run --rm migrateup 
 
 migratedown:
-	migrate -path src/db/migration -database "postgresql://criciumenses:CriciumaNaSerieA@localhost:7654/employeeManagement?sslmode=disable" -verbose down
+	docker-compose run --rm migratedown 
 
 migratedrop:
-	migrate -path src/db/migration -database "postgresql://criciumenses:CriciumaNaSerieA@localhost:7654/employeeManagement?sslmode=disable" force 1
+	docker-compose run --rm migrate -path src/db/migration -database "postgresql://criciumenses:CriciumaNaSerieA@db:5432/employeeManagement?sslmode=disable" force 1
 
-.PHONY: createdb exec dropdb migrateup migratedown migratedrop setpass dml-script
+setup:
+	docker-compose exec app sh /usr/src/app/setup.sh
+
+.PHONY: createdb exec dropdb migrateup migratedown migratedrop setpass dml-script setup

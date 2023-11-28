@@ -1,4 +1,4 @@
-const scheduleRepository = require('../repositories/scheduleRepository.js');
+const scheduleRepository = require('../repositories/scheduleRepository.cjs');
 
 const getSchedules = async (req, res) => {
     try {

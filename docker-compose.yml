@@ -1,6 +1,17 @@
-version: '3.1'
+version: '3.8'
 
 services:
+  # Application service
+  app:
+    build: .
+    ports:
+      - "3000:3000"
+    depends_on:
+      - db
+    environment:
+      - DATABASE_URL=postgres://criciumenses:CriciumaNaSerieA@db:5432/employeeManagement
+
+  # Database service
   db:
     image: postgres:16-alpine
     container_name: postgres16-bd
@@ -13,6 +24,24 @@ services:
       - "7654:5432"
     volumes:
       - my_dbdata:/var/lib/postgresql/data
+
+  # Migration service for applying migrations
+  migrateup:
+    image: migrate/migrate
+    depends_on:
+      - db
+    volumes:
+      - ./src/db/migration:/migrations
+    command: -path=/migrations/ -database postgres://criciumenses:CriciumaNaSerieA@db:5432/employeeManagement?sslmode=disable up
+
+  # Migration service for rolling back migrations
+  migratedown:
+    image: migrate/migrate
+    depends_on:
+      - db
+    volumes:
+      - ./src/db/migration:/migrations
+    command: -path=/migrations/ -database postgres://criciumenses:CriciumaNaSerieA@db:5432/employeeManagement?sslmode=disable down
 
 volumes:
   my_dbdata:
